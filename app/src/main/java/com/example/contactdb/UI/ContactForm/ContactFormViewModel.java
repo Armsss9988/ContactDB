@@ -1,4 +1,4 @@
-package com.example.contactdb.ContactForm;
+package com.example.contactdb.UI.ContactForm;
 
 import android.app.Application;
 

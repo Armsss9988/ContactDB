@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/contact"
-        android:name="com.example.contactdb.ContactDetails.ContactDetails"
-        android:label="ContactDetails"
+        android:name="com.example.contactdb.UI.ContactDetails.ContactDetails"
+        android:label="Contact Details"
         tools:layout="@layout/fragment_contact_details"/>
     <fragment
         android:id="@+id/new_contact"
-        android:name="com.example.contactdb.ContactForm.ContactFormFragment"
-        android:label="ContactFormFragment"
+        android:name="com.example.contactdb.UI.ContactForm.ContactFormFragment"
+        android:label="New Contact"
         tools:layout="@layout/fragment_contact_form"/>
 </navigation>

@@ -1,24 +1,21 @@
-package com.example.contactdb.ContactForm;
+package com.example.contactdb.UI.ContactForm;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.contactdb.DatabaseHelper;
-import com.example.contactdb.DetailsActivity;
-import com.example.contactdb.MainActivity;
-import com.example.contactdb.R;
+import com.example.contactdb.AppDatabase.AppDatabase;
+import com.example.contactdb.Models.Person;
 import com.example.contactdb.databinding.FragmentContactFormBinding;
 
 public class ContactFormFragment extends Fragment {
@@ -29,6 +26,7 @@ public class ContactFormFragment extends Fragment {
 
     private ContactFormViewModel mViewModel;
     private FragmentContactFormBinding binding;
+    private AppDatabase appDatabase;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -37,6 +35,9 @@ public class ContactFormFragment extends Fragment {
         binding = FragmentContactFormBinding.inflate(inflater,container,false);
         Button saveDetailsButton = binding.saveDetailsButton;
         registerLiveDataListenner();
+        appDatabase = Room.databaseBuilder(this.getActivity().getApplicationContext(), AppDatabase.class, "sqlite_example_db")
+                .allowMainThreadQueries() // For simplicity, don't use this in production
+                .build();
         saveDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -51,8 +52,7 @@ public class ContactFormFragment extends Fragment {
         mViewModel.getTextEmail().observe(getViewLifecycleOwner(), s -> binding.emailText.setText(s));
     }
     private void saveDetails() {
-        // Creates an object of our helper class
-        DatabaseHelper dbHelper = new DatabaseHelper(this.getActivity().getApplicationContext());
+
 
 
         String name = binding.nameText.getText().toString();
@@ -60,7 +60,12 @@ public class ContactFormFragment extends Fragment {
         String email = binding.emailText.getText().toString();
 
         // Calls the insertDetails method we created
-        long personId = dbHelper.insertDetails(name, dob, email);
+        Person person = new Person();
+        person.name = name;
+        person.dob = dob;
+        person.email = email;
+
+        long personId = appDatabase.personDao().insertPerson(person);
 
         // Shows a toast with the automatically generated id
         Toast.makeText(this.getContext(), "Person has been created with id: " + personId,

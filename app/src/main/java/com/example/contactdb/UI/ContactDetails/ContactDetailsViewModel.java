@@ -1,4 +1,4 @@
-package com.example.contactdb.ContactDetails;
+package com.example.contactdb.UI.ContactDetails;
 
 import androidx.lifecycle.ViewModel;
 
